@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t your-dockerhub-username/nodejs-app:latest .
+  post_build:
+    commands:
+      - echo "Pushing Docker image..."
+      - docker push your-dockerhub-username/nodejs-app:latest
