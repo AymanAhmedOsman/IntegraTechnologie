@@ -3,8 +3,8 @@ phases:
   build:
     commands:
       - echo "Building Docker image..."
-      - docker build -t your-dockerhub-username/nodejs-app:latest .
+      - docker build -t ayman380/intgra:latest .
   post_build:
     commands:
       - echo "Pushing Docker image..."
-      - docker push your-dockerhub-username/nodejs-app:latest
+      - docker push ayman380/intgra:latest
