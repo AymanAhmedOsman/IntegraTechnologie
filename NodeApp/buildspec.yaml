@@ -43,9 +43,9 @@ phases:
       - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
 
       - echo "Building Docker image..."
-      - docker build -t ayman380/nodejs:latest .
+      - docker build -t ayman380/integra .
 
   post_build:
     commands:
       - echo "Pushing Docker image..."
-      - docker push ayman380/nodejs:latest
+      - docker push ayman380/integra
