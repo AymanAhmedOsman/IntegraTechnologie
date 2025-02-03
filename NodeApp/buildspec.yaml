@@ -1,15 +1,15 @@
 version: 0.2
+
 phases:
   install:
-    commands:     
-      - sudo apt-get update -y
-      - sudo apt-get install -y docker.io
-      - sudo service docker start
+    commands:
+      - echo "AWS CodeBuild already has Docker installed."
+      - docker --version  # Verify Docker installation
+      - echo "Installing AWS CLI..."
       - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
       - unzip awscliv2.zip
       - sudo ./aws/install
-      # - aws --version  # Verify AWS CLI installation
-      # - docker --version  # Verify Docker installation
+      - aws --version  # Verify AWS CLI installation
 
   pre_build:
     commands:
@@ -19,8 +19,10 @@ phases:
   build:
     commands:
       - echo "Building Docker image..."
-      - docker build -t cicd .
-      - docker push public.ecr.aws/y5w4k1m3/cicd:latest
+      - docker build -t my-app .
+      - docker tag my-app:latest public.ecr.aws/y5w4k1m3/my-app:latest
+      - docker push public.ecr.aws/y5w4k1m3/my-app:latest
+
 
 
 
