@@ -1,47 +1,19 @@
-# version: 0.2
-# phases:
-#   build:
-#     commands:
-#       - echo "Building Docker image..."
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: us-east-1
-          
-#       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com
-#       - docker build -t 929806479990.dkr.ecr.us-east-1.amazonaws.com/expose8080:latest .
-#   post_build:
-#     commands:
-#       - echo "Pushing Docker image..."
-#       - docker push 929806479990.dkr.ecr.us-east-1.amazonaws.com/expose8080:latest
-#       # - echo "Deploying to EKS..."
-#       # - kubectl apply -f deployment.yaml
-
-
-
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: us-east-1
-# ==================================================================
-
 version: 0.2
 
-env:
-  secrets-manager:
-    DOCKERHUB_USERNAME: "dockerhub-credentials:DOCKERHUB_USERNAME"
-    DOCKERHUB_PASSWORD: "dockerhub-credentials:DOCKERHUB_PASSWORD"
-
 phases:
+  install:
+    runtime-versions:
+      docker: 19
+  pre_build:
+    commands:
+      - echo Logging in to Docker Hub...
+      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
   build:
     commands:
-      - echo "Logging in to Docker Hub..."
-      - echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
-      - docker build -t ayman380/integra .
+      - echo Building the Docker image...
+      - docker build -t cidemo:latest .
   post_build:
     commands:
-      - docker push ayman380/integra
+      - echo Pushing the Docker image...
+      - docker tag cidemo:latest ayman380/cidemo:latest
+      - docker push ayman380/cidemo:latest
