@@ -3,6 +3,7 @@ phases:
   build:
     commands:
       - echo "Building Docker image..."
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com
       - docker build -t 929806479990.dkr.ecr.us-east-1.amazonaws.com/expose8080:latest .
   post_build:
     commands:
