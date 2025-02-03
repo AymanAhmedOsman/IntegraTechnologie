@@ -16,7 +16,7 @@ phases:
       # - DOCKER_HUB_USERNAME=$(echo $DOCKER_HUB_CREDS | jq -r .username)
       # - DOCKER_HUB_PASSWORD=$(echo $DOCKER_HUB_CREDS | jq -r .password)
       # - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
-       - echo Ayman380 | docker login --username Ayman@DOC12 --password-stdin
+       - echo Ayman@DOC12 | docker login --username ayman380 --password-stdin
       # - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com
   build:
