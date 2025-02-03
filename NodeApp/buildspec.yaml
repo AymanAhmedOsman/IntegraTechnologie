@@ -1,20 +1,15 @@
 version: 0.2
-
 phases:
   install:
-    commands:
-      - echo "Updating package list..."
+    commands:     
       - apt-get update -y
-      - echo "Installing Docker..."
       - apt-get install -y docker.io
-      - echo "Starting Docker service..."
-      - service docker start
-      - echo "Installing AWS CLI..."
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - unzip awscliv2.zip
-      - sudo ./aws/install
-      - aws --version  # Verify AWS CLI installation
-      - docker --version  # Verify Docker installation
+      # - service docker start
+      # - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      # - unzip awscliv2.zip
+      # - sudo ./aws/install
+      # - aws --version  # Verify AWS CLI installation
+      # - docker --version  # Verify Docker installation
 
   pre_build:
     commands:
@@ -25,7 +20,6 @@ phases:
     commands:
       - echo "Building Docker image..."
       - docker build -t cicd .
-      - docker tag my-app:latest public.ecr.aws/y5w4k1m3/cicd:latest
       - docker push public.ecr.aws/y5w4k1m3/cicd:latest
 
 
