@@ -1,22 +1,44 @@
-version: 0.2
+name: Build Docker Image to Amazon ECR
 
-phases:
-  install:
-    commands:
-      - echo "Installing dependencies..."
-      - apt-get update && apt-get install -y docker.io awscli
+on:
+  push:
+    branches:
+      - main  # Trigger the action on push to the main branch
 
-  pre_build:
-    commands:
-      - echo "Logging in to Amazon ECR..."
-      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y5w4k1m3
-
+jobs:
   build:
-    commands:
-      - echo "Building Docker image..."
-      - docker build -t cicd .
+    runs-on: ubuntu-latest
 
-  post_build:
-    commands:
-      - echo "Pushing Docker image to Amazon ECR..."
-      - docker push public.ecr.aws/y5w4k1m3/cicd:latest
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Configure AWS credentials using GitHub Secrets
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Step 3: Install Docker and AWS CLI
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io awscli
+
+      # Step 4: Log in to Amazon ECR
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com
+
+      # Step 5: Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t cicd .
+
+      # Step 6: Push Docker image to Amazon ECR
+      - name: Push Docker image to ECR
+        run: |
+          docker push public.ecr.aws/y5w4k1m3/cicd:latest
