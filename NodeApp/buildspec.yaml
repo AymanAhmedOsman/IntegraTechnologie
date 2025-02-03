@@ -5,7 +5,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
-      - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - echo "Ayman@DOC12" | docker login --username "ayman380" --password-stdin
   build:
     commands:
       - echo Building the Docker image...
