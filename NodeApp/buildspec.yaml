@@ -2,9 +2,14 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      docker: 20  # Ensures Docker is available
     commands:
-      - echo "Installing dependencies..."
-      - apt-get update && apt-get install -y docker.io awscli
+      - echo "Installing AWS CLI..."
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - sudo ./aws/install
+      - aws --version  # Verify installation
 
   pre_build:
     commands:
@@ -15,8 +20,48 @@ phases:
     commands:
       - echo "Building Docker image..."
       - docker build -t cicd .
-
-  post_build:
-    commands:
-      - echo "Pushing Docker image to Amazon ECR..."
       - docker push public.ecr.aws/y5w4k1m3/cicd:latest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# version: 0.2
+
+# phases:
+#   install:
+#     commands:
+#       - echo "Installing dependencies..."
+#       - apt-get update && apt-get install -y docker.io awscli
+
+#   pre_build:
+#     commands:
+#       - echo "Logging in to Amazon ECR..."
+#       - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y5w4k1m3
+
+#   build:
+#     commands:
+#       - echo "Building Docker image..."
+#       - docker build -t cicd .
+
+#   post_build:
+#     commands:
+#       - echo "Pushing Docker image to Amazon ECR..."
+#       - docker push public.ecr.aws/y5w4k1m3/cicd:latest
