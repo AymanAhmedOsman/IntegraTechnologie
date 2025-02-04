@@ -22,13 +22,15 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo .
+      # - docker build -t 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo .
+      - docker build -t myrepo/nodejs:latest .
       - echo Tagging the Docker image...
       - docker tag 929806479990.dkr.ecr.us-east-1.amazonaws.com/nodejs:latest 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
-      - docker push 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo
+      # - docker push 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo
+      - docker push myrepo/nodejs:latest
       - echo Writing image definitions file...
       - echo '{"ImageURI":"929806479990.dkr.ecr.us-east-1.amazonaws.com/nodejs:latest"}' > imagedefinitions.json
 artifacts:
