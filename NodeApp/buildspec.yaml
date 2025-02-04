@@ -12,7 +12,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
-      - DOCKER_HUB_CREDS=$(aws secretsmanager get-secret-value --secret-id DOCKER_HUB_CREDS --query SecretString --output text)
+      - DOCKER_HUB_CREDS=$(aws secretsmanager get-secret-value --secret-id dockerhub-cred --query SecretString --output text)
       - DOCKER_HUB_USERNAME=$(echo $DOCKER_HUB_CREDS | jq -r .username)
       - DOCKER_HUB_PASSWORD=$(echo $DOCKER_HUB_CREDS | jq -r .password)
       - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
