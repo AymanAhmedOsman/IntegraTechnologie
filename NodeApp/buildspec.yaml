@@ -1,22 +1,20 @@
 version: 0.2
 
-env:
-  secrets-manager:
-    DOCKER_HUB_USERNAME: "dockerhub-cred-UCtbuX:DOCKER_HUB_USERNAME"  # Reference to your secret's key for username
-    DOCKER_HUB_PASSWORD: "dockerhub-cred-UCtbuX:DOCKER_HUB_PASSWORD"  # Reference to your secret's key for password
-    ECR_REPO_URI: "929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo"  # Your ECR repository URI
-
 phases:
   install:
     commands:
-      - echo "Installing dependencies..."
-      - apt-get update && apt-get install -y docker.io awscli
-      - service docker start
-      - aws --version  # Verify AWS CLI is installed
-      - docker --version  # Verify Docker is installed
+      - echo Installing Docker...
+      - curl -fsSL https://get.docker.com -o get-docker.sh
+      - sh get-docker.sh
+      # - usermod -aG docker $USER
+      # - service docker start
+      - docker --version
   pre_build:
     commands:
-      - echo "Logging in to Docker Hub..."
+      - echo Logging in to Docker Hub...
+      - DOCKER_HUB_CREDS=$(aws secretsmanager get-secret-value --secret-id dockerhub-cred --query SecretString --output text)
+      - DOCKER_HUB_USERNAME=$(echo $DOCKER_HUB_CREDS | jq -r .username)
+      - DOCKER_HUB_PASSWORD=$(echo $DOCKER_HUB_CREDS | jq -r .password)
       - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo
