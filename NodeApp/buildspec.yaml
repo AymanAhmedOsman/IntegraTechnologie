@@ -6,14 +6,13 @@ phases:
       - echo Installing Docker...
       - curl -fsSL https://get.docker.com -o get-docker.sh
       - sh get-docker.sh
-      # - usermod -aG docker $USER
-      # - service docker start
+      - usermod -aG docker $USER
+      - service docker start
       - docker --version
-
-    env:
-      secrets-manager:
-        DOCKERHUB_USERNAME: "DOCKER_HUB_CREDS:DOCKER_HUB_USERNAME"
-        DOCKERHUB_PASSWORD: "DOCKER_HUB_CREDS:DOCKER_HUB_PASSWORD"
+  env:
+    secrets-manager:
+      DOCKERHUB_USERNAME: "DOCKER_HUB_CREDS:DOCKER_HUB_USERNAME"
+      DOCKERHUB_PASSWORD: "DOCKER_HUB_CREDS:DOCKER_HUB_PASSWORD"
     
   pre_build:
     commands:
