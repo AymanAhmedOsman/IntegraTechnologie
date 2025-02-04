@@ -15,22 +15,20 @@ phases:
       # - DOCKER_HUB_CREDS=$(aws secretsmanager get-secret-value --secret-id docker-hub-creds --query SecretString --output text)
       # - DOCKER_HUB_USERNAME=$(echo $DOCKER_HUB_CREDS | jq -r .username)
       # - DOCKER_HUB_PASSWORD=$(echo $DOCKER_HUB_CREDS | jq -r .password)
-      - echo Ayman@DOC12 | docker login --username ayman380 --password-stdin
+      - echo $DOCKER_HUB_PASSWORD | docker login --username $DOCKER_HUB_USERNAME --password-stdin
       - echo Logging in to Amazon ECR...
       # - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 929806479990.dkr.ecr.us-east-1.amazonaws.com
   build:
     commands:
       - echo Building the Docker image...
-      # - docker build -t 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo .
-      - docker build -t myrepo/nodejs:latest .
+      - docker build -t 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo .
       - echo Tagging the Docker image...
       - docker tag 929806479990.dkr.ecr.us-east-1.amazonaws.com/nodejs:latest 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo:latest
   post_build:
     commands:
       - echo Pushing the Docker image to ECR...
-      # - docker push 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo
-      - docker push myrepo/nodejs:latest
+      - docker push 929806479990.dkr.ecr.us-east-1.amazonaws.com/myrepo
       - echo Writing image definitions file...
       - echo '{"ImageURI":"929806479990.dkr.ecr.us-east-1.amazonaws.com/nodejs:latest"}' > imagedefinitions.json
 artifacts:
