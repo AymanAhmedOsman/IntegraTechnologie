@@ -1,5 +1,10 @@
 version: 0.2
 
+env:
+   secrets-manager:
+     DOCKERHUB_USERNAME: "DOCKER_HUB_CREDS:DOCKER_HUB_USERNAME"
+     DOCKERHUB_PASSWORD: "DOCKER_HUB_CREDS:DOCKER_HUB_PASSWORD"
+    
 phases:
   install:
     commands:
@@ -9,11 +14,7 @@ phases:
       - usermod -aG docker $USER
       - service docker start
       - docker --version
-  env:
-    secrets-manager:
-      DOCKERHUB_USERNAME: "DOCKER_HUB_CREDS:DOCKER_HUB_USERNAME"
-      DOCKERHUB_PASSWORD: "DOCKER_HUB_CREDS:DOCKER_HUB_PASSWORD"
-    
+
   pre_build:
     commands:
       - echo Logging in to Docker Hub...
